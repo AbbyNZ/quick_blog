@@ -28,6 +28,12 @@
     <% if alert %>
       <p class="alert alert-danger"><%= alert%></p>
     <% end %>
-    <%= yield %>
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 col-sm-10 col-sm-8">
+          <%= yield %>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
