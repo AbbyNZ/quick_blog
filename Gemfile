@@ -36,6 +36,9 @@ gem 'jbuilder', '~> 2.5'
 
 gem 'responders'
 
+gem 'inherited_resources', github: 'activeadmin/inherited_resources'
+gem 'activeadmin', github: 'activeadmin/activeadmin'
+
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
