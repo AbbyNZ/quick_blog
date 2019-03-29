@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.feature "Posting Comments", :type => :feature do
   background do
-    @post = Post.create(title: 'Awesome Blog Post', body: 'Lorem ipsum dolor sit amet')
+    @post = Post.create(title: 'Awesome Blog Post', body: 'Lorem ipsum dolor sit amet', published: true)
   end
 
   scenario "Visit root_path" do

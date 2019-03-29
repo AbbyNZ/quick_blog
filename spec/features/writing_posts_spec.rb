@@ -23,6 +23,7 @@ feature 'Writing blog posts' do
 
     fill_in 'post_title', with: 'New Blog Post'
     fill_in 'post_body', with: "[Example.com link] (http://example.com/)"
+    page.check 'Published'
     click_button 'Create Post'
 
     visit post_path(Post.last)

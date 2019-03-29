@@ -3,8 +3,8 @@ require 'rails_helper'
 feature 'Reading the Blog' do
   background do
     Post.destroy_all
-    @post = Post.create(title: 'Awesome Blog Post', body: 'Lorem ipsum dolor sit amet')
-    Post.create(title: 'Another Awesome Post', body: 'Lorem ipsum dolor sit amet')
+    @post = Post.create(title: 'Awesome Blog Post', body: 'Lorem ipsum dolor sit amet', published: true)
+    Post.create(title: 'Another Awesome Post', body: 'Lorem ipsum dolor sit amet', published: true)
     @user = User.create
     sign_in @user
   end
