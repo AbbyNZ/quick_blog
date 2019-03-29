@@ -1,21 +1,28 @@
 require 'rails_helper'
 
-RSpec.feature "Posting Comments", :type => :feature do
+feature 'Posting Comments' do
   background do
-    @post = Post.create(title: 'Awesome Blog Post', body: 'Lorem ipsum dolor sit amet', published: true)
+    @user = User.create(email: 'user@example.com', password: 'password')
+    @admin = AdminUser.create(email: 'admin@example.com', password: 'password')
+
+    @post = Post.create!(title: 'Awesome Blog Post', body: 'Lorem ipsum dolor sit amet', published: true, author: @admin)
+
+    log_in_user
   end
 
-  scenario "Visit root_path" do
-    @user = User.create(email:'test@example.com', password: 'secret')
-
+  def log_in_user(email = 'user@example.com', password = 'password')
+    reset_session!
     visit new_user_session_path
-    fill_in 'Email', with: @user.email
-    fill_in 'Password', with: @user.password
-    click_button 'Log in'
+    fill_in 'Email', with: email
+    fill_in 'Password', with: password
+    click_button 'Login'
+  end
 
+  # Note this scenario doesn't test the AJAX comment posting.
+  scenario 'Posting a comment' do
     visit post_path(@post)
 
-    comment = 'This post is just filler test. Ripped off!'
+    comment = 'This post is just filler text. Ripped off!'
 
     fill_in 'comment_body', with: comment
     click_button 'Add comment'

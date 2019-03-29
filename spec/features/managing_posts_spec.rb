@@ -35,9 +35,23 @@ feature 'Managing blog posts' do
       expect(page).to have_content 'This post was made from the Admin Interface'
     end
 
+    scenario 'Publishing an existing blog' do
+      @post = Post.create(title: 'New Post', body: "Hello world!", published: true, author: @admin)
+      @post.save!
+
+      visit admin_post_path(@post)
+      click_link 'Edit Post'
+
+      check 'Published'
+      click_button 'Update Post'
+
+      expect(page).to have_content 'Post was successfully updated'
+      expect(Post.last.published?).to be true
+    end
+
     context 'with an existing blog post' do
       background do
-        @post = Post.create(:title => 'Awesome Blog Post', :body => 'Lorem ipsum dolor sit amet')
+        @post = Post.create(:title => 'Awesome Blog Post', :body => 'Lorem ipsum dolor sit amet', published: true, author: @admin)
       end
 
       scenario 'Editing an existing blog' do
@@ -51,5 +65,7 @@ feature 'Managing blog posts' do
         expect(page).to have_content 'Not really Awesome Blog Post'
       end
     end
+
   end
+
 end

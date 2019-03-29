@@ -1,19 +1,43 @@
 require 'rails_helper'
 
 feature 'Reading the Blog' do
-  background do
-    Post.destroy_all
-    @post = Post.create(title: 'Awesome Blog Post', body: 'Lorem ipsum dolor sit amet', published: true)
-    Post.create(title: 'Another Awesome Post', body: 'Lorem ipsum dolor sit amet', published: true)
-    @user = User.create
-    sign_in @user
+  context 'for an unpublished post' do
+    background do
+      email = 'admin@example.com'
+      password = 'password'
+      @admin = AdminUser.create(email: email, password: password)
+
+      @post = Post.create(title: 'Unpublished Post', body: 'Lorem ipsum dolor sit amet', author: @admin)
+    end
+    scenario 'it does not appear in the index' do
+      visit root_path
+
+      expect(page).to_not have_content 'Unpublished Post'
+    end
+
+    scenario 'it cannot be visited directly' do
+      expect(lambda {
+        visit post_path(@post)
+        }).to raise_error(ActiveRecord::RecordNotFound)
+    end
   end
+
+  context 'for a published post' do
+    background do
+      email = 'admin@example.com'
+      password = 'password'
+      @admin = AdminUser.create(email: email, password: password)
+
+      @post = Post.create(title: 'Awesome Blog Post', body: 'Lorem ipsum dolor sit amet', published: true, author: @admin)
+      Post.create(title: 'Another Awesome Post', body: 'Lorem ipsum dolor sit amet', published: true, author: @admin)
+    end
 
   scenario 'Reading the blog index' do
     visit root_path
 
     expect(page).to have_content 'Awesome Blog Post'
     expect(page).to have_content 'Another Awesome Post'
+    expect(page).to have_content 'Posted by: admin@example.com'
   end
 
   scenario 'Reading an individual blog' do
@@ -22,4 +46,5 @@ feature 'Reading the Blog' do
 
     expect(current_path).to eq post_path(@post)
   end
+ end 
 end
